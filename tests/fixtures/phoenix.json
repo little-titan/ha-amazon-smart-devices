@@ -1,0 +1,4 @@
+{
+  "_note": "SYNTHETIC fixture shaped after ha-alexa-smarthome field names. Replace with a real capture from scripts/discover.py before Milestone 3.",
+  "networkDetail": "{\"locationDetails\": {\"Default_Location\": {\"amazonBridgeDetails\": {\"amazonBridgeDetails\": {\"LambdaBridge_AAA/SonarCloudService\": {\"applianceDetails\": {\"applianceDetails\": {\"AAA_SonarCloudService_x\": {\"friendlyName\": \"Hallway Thermostat\", \"applianceTypes\": [\"THERMOSTAT\"], \"capabilities\": [{\"interfaceName\": \"Alexa.ThermostatController\"}]}, \"AAA_SonarCloudService_y\": {\"friendlyName\": \"Kitchen\", \"applianceTypes\": [\"LIGHT\"], \"capabilities\": [{\"interfaceName\": \"Alexa.PowerController\"}]}, \"AAA_SonarCloudService_plug\": {\"friendlyName\": \"Coffee Maker\", \"applianceTypes\": [\"SMARTPLUG\"], \"manufacturerName\": \"Amazon\", \"capabilities\": [{\"interfaceName\": \"Alexa.PowerController\"}]}}}}}}}}}"
+}

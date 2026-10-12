@@ -1,0 +1,13 @@
+{
+  "domain": "amazon_smart_devices",
+  "name": "Amazon Smart Devices",
+  "codeowners": ["@little-titan"],
+  "config_flow": true,
+  "documentation": "https://github.com/little-titan/ha-amazon-smart-devices",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/little-titan/ha-amazon-smart-devices/issues",
+  "loggers": ["aioamazondevices"],
+  "requirements": ["aioamazondevices>=16.0.0,<17"],
+  "version": "0.5.0"
+}
