@@ -73,3 +73,14 @@ behave. The `logs/` folder is git-ignored for those downloads.
 
 This is unofficial and not affiliated with Amazon. It relies on Alexa's
 private web API, which Amazon can change at any time.
+
+## Releases and contributing
+
+Releases are automatic. Pull requests are squash-merged and the PR title must
+be a [conventional commit](https://www.conventionalcommits.org/) (`feat:`,
+`fix:`, `chore:` ...); a check enforces it. After the checks pass on `main`, a
+workflow picks the next version from those titles (`feat` = minor, `fix` or
+`perf` = patch, `!` or `BREAKING CHANGE` = major, anything else = no release),
+tags it and publishes a GitHub release. The version is written into
+`manifest.json` inside the release zip only, so the one in the repo is a
+placeholder.
