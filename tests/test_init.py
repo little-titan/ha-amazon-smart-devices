@@ -33,9 +33,7 @@ async def test_setup_registers_device(
     assert config_entry.state is ConfigEntryState.LOADED
 
     mock_echo_api.login.login_mode_stored_data.assert_awaited_once()
-    device = dr.async_get(hass).async_get_device(
-        identifiers={(DOMAIN, THERMO_ID)}
-    )
+    device = dr.async_get(hass).async_get_device(identifiers={(DOMAIN, THERMO_ID)})
     assert device is not None
     assert device.name == "Hallway Thermostat"
     assert device.manufacturer == "Amazon"

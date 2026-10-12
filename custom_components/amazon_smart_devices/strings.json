@@ -59,5 +59,21 @@
     "action_failed": {
       "message": "Amazon did not accept the command: {error}"
     }
+  },
+  "entity": {
+    "climate": {
+      "thermostat": {
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "circulate": "Circulate"
+            }
+          }
+        },
+        "state": {
+          "heat_cool": "Auto"
+        }
+      }
+    }
   }
 }

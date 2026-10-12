@@ -9,10 +9,8 @@ from homeassistant.helpers import aiohttp_client, device_registry as dr
 from .const import DOMAIN
 from .coordinator import SmartDevicesConfigEntry, SmartDevicesCoordinator
 
-# Amazon Smart Plug -> switch. The thermostat is registered as a device and
-# polled for diagnostics; Platform.CLIMATE is added in Milestone 3 once its
-# real payload has been captured.
-PLATFORMS: list[Platform] = [Platform.SWITCH]
+# Amazon Smart Plug -> switch, Amazon Smart Thermostat -> climate.
+PLATFORMS: list[Platform] = [Platform.CLIMATE, Platform.SWITCH]
 
 
 async def async_setup_entry(

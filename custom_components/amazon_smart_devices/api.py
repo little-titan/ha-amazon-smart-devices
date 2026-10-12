@@ -43,6 +43,8 @@ THERMOSTAT_CATEGORY = "THERMOSTAT"
 THERMOSTAT_FEATURE = "thermostat"
 SMART_PLUG_CATEGORY = "SMARTPLUG"
 POWER_FEATURE = "power"
+MODE_FEATURE = "mode"
+FAN_INSTANCE = "5"
 AMAZON_MANUFACTURER = "amazon"
 
 
@@ -117,6 +119,21 @@ _STATE_FEATURES_RICH = """
       }
       ... on ThermostatMode {
         thermostatModeValue
+      }
+      ... on ThermostatConfigurationAllowedTemperatureRange {
+        thermostatAllowedTemperatureRangeValue {
+          heating { minimum { value scale } maximum { value scale } }
+          cooling { minimum { value scale } maximum { value scale } }
+        }
+      }
+      ... on Mode {
+        modeValue { value }
+      }
+      ... on HvacCoolerStage {
+        coolerStageValue { value }
+      }
+      ... on HvacPrimaryHeaterStage {
+        primaryHeaterStageValue { value }
       }
       ... on RangeValue {
         rangeValue { value }
@@ -290,6 +307,166 @@ def power_state(state: dict[str, Any] | None) -> bool | None:
             value = (prop.get("powerStateValue") or "").upper()
             return {"ON": True, "OFF": False}.get(value)
     return None
+
+
+def _thermostat_property(
+    state: dict[str, Any] | None, feature_name: str, prop_name: str
+) -> dict[str, Any] | None:
+    """Return a healthy property of a feature, None if absent or errored."""
+    for feature, prop in _properties(state):
+        if (
+            feature == feature_name
+            and prop.get("name") == prop_name
+            and not prop.get("error")
+        ):
+            return prop
+    return None
+
+
+def _temperature(prop: dict[str, Any] | None) -> tuple[float, str] | None:
+    value = (prop or {}).get("value") or {}
+    if value.get("value") is None:
+        return None
+    return float(value["value"]), str(value.get("scale") or "").upper()
+
+
+def current_temperature(state: dict[str, Any] | None) -> tuple[float, str] | None:
+    """Return (value, scale) measured by the thermostat, None if unknown."""
+    return _temperature(_thermostat_property(state, "temperatureSensor", "temperature"))
+
+
+def target_setpoint(state: dict[str, Any] | None) -> tuple[float, str] | None:
+    """Return (value, scale) of the single target setpoint, None if unknown."""
+    return _temperature(
+        _thermostat_property(state, THERMOSTAT_FEATURE, "targetSetpoint")
+    )
+
+
+def auto_setpoints(
+    state: dict[str, Any] | None,
+) -> tuple[tuple[float, str], tuple[float, str]] | None:
+    """Return ((low, scale), (high, scale)) while in Auto mode, else None."""
+    low = _temperature(_thermostat_property(state, THERMOSTAT_FEATURE, "lowerSetpoint"))
+    high = _temperature(
+        _thermostat_property(state, THERMOSTAT_FEATURE, "upperSetpoint")
+    )
+    return (low, high) if low and high else None
+
+
+def thermostat_mode(state: dict[str, Any] | None) -> str | None:
+    """Return the Alexa thermostat mode (HEAT, COOL, OFF ...), None if unknown."""
+    prop = _thermostat_property(state, THERMOSTAT_FEATURE, "thermostatMode")
+    mode = (prop or {}).get("thermostatModeValue")
+    return str(mode).upper() if mode else None
+
+
+def hvac_stage(state: dict[str, Any] | None, key: str) -> str | None:
+    """Return a stage value (``coolerStage`` / ``primaryHeaterStage``), if any."""
+    for feature, prop in _properties(state):
+        if feature == "hvac" and f"{key}Value" in prop and not prop.get("error"):
+            value = (prop.get(f"{key}Value") or {}).get("value")
+            return str(value).upper() if value else None
+    return None
+
+
+def allowed_range(
+    state: dict[str, Any] | None, kind: str
+) -> tuple[float, float] | None:
+    """Return (min, max) allowed for ``heating`` or ``cooling``, if reported."""
+    for _, prop in _properties(state):
+        rng = (prop.get("thermostatAllowedTemperatureRangeValue") or {}).get(kind)
+        if rng and rng.get("minimum") and rng.get("maximum"):
+            return float(rng["minimum"]["value"]), float(rng["maximum"]["value"])
+    return None
+
+
+def _set_thermostat_property(
+    state: dict[str, Any], prop_name: str, **fields: Any
+) -> dict[str, Any]:
+    """Return a copy of ``state`` with fields set on one thermostat property."""
+    new = copy.deepcopy(state)
+    for feature in new.get("features") or []:
+        if feature.get("name") != THERMOSTAT_FEATURE:
+            continue
+        for prop in feature.get("properties") or []:
+            if prop.get("name") == prop_name:
+                prop.update(fields, error=None)
+                return new
+        feature.setdefault("properties", []).append({"name": prop_name, **fields})
+        return new
+    new.setdefault("features", []).append(
+        {
+            "name": THERMOSTAT_FEATURE,
+            "properties": [{"name": prop_name, **fields}],
+        }
+    )
+    return new
+
+
+def with_thermostat_mode(state: dict[str, Any], mode: str) -> dict[str, Any]:
+    """Return a copy of ``state`` with the thermostat mode set (optimistic)."""
+    return _set_thermostat_property(state, "thermostatMode", thermostatModeValue=mode)
+
+
+def with_target_setpoint(
+    state: dict[str, Any], value: float, scale: str
+) -> dict[str, Any]:
+    """Return a copy of ``state`` with the target setpoint set (optimistic)."""
+    return _set_thermostat_property(
+        state, "targetSetpoint", value={"value": value, "scale": scale}
+    )
+
+
+def with_auto_setpoints(
+    state: dict[str, Any], low: float, high: float, scale: str
+) -> dict[str, Any]:
+    """Return a copy of ``state`` with the Auto low/high set (optimistic)."""
+    new = _set_thermostat_property(
+        state, "lowerSetpoint", value={"value": low, "scale": scale}
+    )
+    return _set_thermostat_property(
+        new, "upperSetpoint", value={"value": high, "scale": scale}
+    )
+
+
+def fan_mode(state: dict[str, Any] | None) -> str | None:
+    """Return the Alexa fan mode id ("1" on, "2" auto, "3" circulate), if known."""
+    for feature in (state or {}).get("features") or []:
+        if (
+            feature.get("name") != MODE_FEATURE
+            or feature.get("instance") != FAN_INSTANCE
+        ):
+            continue
+        for prop in feature.get("properties") or []:
+            value = (prop.get("modeValue") or {}).get("value")
+            if value and not prop.get("error"):
+                return str(value)
+    return None
+
+
+def with_fan_mode(state: dict[str, Any], mode: str) -> dict[str, Any]:
+    """Return a copy of ``state`` with the fan mode set (optimistic)."""
+    new = copy.deepcopy(state)
+    features = new.setdefault("features", [])
+    for feature in features:
+        if (
+            feature.get("name") == MODE_FEATURE
+            and feature.get("instance") == FAN_INSTANCE
+        ):
+            feature["properties"] = [
+                {"name": "mode", "__typename": "Mode", "modeValue": {"value": mode}}
+            ]
+            return new
+    features.append(
+        {
+            "name": MODE_FEATURE,
+            "instance": FAN_INSTANCE,
+            "properties": [
+                {"name": "mode", "__typename": "Mode", "modeValue": {"value": mode}}
+            ],
+        }
+    )
+    return new
 
 
 def is_reachable(state: dict[str, Any] | None) -> bool | None:
@@ -474,6 +651,7 @@ class AlexaSmartHomeClient:
         feature_name: str,
         operation_name: str,
         payload: dict[str, Any] | None = None,
+        instance: str | None = None,
     ) -> dict[str, Any]:
         """Invoke a feature operation (e.g. thermostat/setThermostatMode)."""
         request: dict[str, Any] = {
@@ -481,6 +659,8 @@ class AlexaSmartHomeClient:
             "featureName": feature_name,
             "featureOperationName": operation_name,
         }
+        if instance:
+            request["instance"] = instance
         if payload:
             request["payload"] = payload
         response = await self._graphql(

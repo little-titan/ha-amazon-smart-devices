@@ -52,7 +52,9 @@ async def test_only_amazon_plug_becomes_a_switch(
     entries = er.async_entries_for_config_entry(
         er.async_get(hass), config_entry.entry_id
     )
-    assert [(e.entity_id, e.unique_id) for e in entries] == [(ENTITY_ID, PLUG_ID)]
+    assert [(e.entity_id, e.unique_id) for e in entries if e.domain == "switch"] == [
+        (ENTITY_ID, PLUG_ID)
+    ]
 
 
 @pytest.mark.parametrize(
