@@ -9,5 +9,5 @@
   "issue_tracker": "https://github.com/little-titan/ha-amazon-smart-devices/issues",
   "loggers": ["aioamazondevices"],
   "requirements": ["aioamazondevices>=16.0.0,<17"],
-  "version": "0.5.0"
+  "version": "0.0.1"
 }
