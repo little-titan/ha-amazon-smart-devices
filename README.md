@@ -1,0 +1,1 @@
+# ha-amazon-smart-devices
