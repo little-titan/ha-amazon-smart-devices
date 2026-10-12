@@ -1,0 +1,85 @@
+{
+  "_note": "SYNTHETIC fixture shaped after ha-alexa-smarthome field names. Replace with a real capture from scripts/discover.py before Milestone 3.",
+  "data": {
+    "listEndpoints": {
+      "endpoints": [
+        {
+          "endpointId": "amzn1.alexa.endpoint.11111111-2222-3333-4444-555555555555",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Hallway Thermostat"
+            }
+          },
+          "features": [
+            {
+              "name": "thermostat",
+              "instance": null,
+              "properties": [
+                {
+                  "name": "thermostatMode",
+                  "__typename": "ThermostatMode",
+                  "thermostatModeValue": "HEAT"
+                },
+                {
+                  "name": "targetSetpoint",
+                  "__typename": "Setpoint",
+                  "value": {
+                    "value": 68,
+                    "scale": "FAHRENHEIT"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "temperatureSensor",
+              "instance": null,
+              "properties": [
+                {
+                  "name": "temperature",
+                  "__typename": "TemperatureSensor",
+                  "value": {
+                    "value": 70.5,
+                    "scale": "FAHRENHEIT"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "endpointId": "amzn1.alexa.endpoint.aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Coffee Maker"
+            }
+          },
+          "features": [
+            {
+              "name": "power",
+              "instance": null,
+              "properties": [
+                {
+                  "name": "powerState",
+                  "__typename": "Power",
+                  "powerStateValue": "ON",
+                  "error": null
+                }
+              ]
+            },
+            {
+              "name": "connectivity",
+              "instance": null,
+              "properties": [
+                {
+                  "name": "connectivity",
+                  "__typename": "Reachability",
+                  "reachabilityStatusValue": "OK"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

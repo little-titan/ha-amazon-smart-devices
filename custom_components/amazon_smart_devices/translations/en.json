@@ -1,0 +1,79 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sign in to Amazon",
+        "description": "Use the account your Amazon devices are registered to in the Alexa app. Your password is used for this sign-in only and is not stored.",
+        "data": {
+          "username": "Email",
+          "password": "Password"
+        },
+        "data_description": {
+          "username": "The email address of your Amazon account."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Sign in to Amazon again",
+        "description": "Amazon rejected the stored login for {username}. Enter your password; you will be asked for a one-time code next.",
+        "data": {
+          "password": "Password"
+        }
+      },
+      "otp": {
+        "title": "Enter your one-time code",
+        "description": "Amazon is asking {username} for a one-time code. Enter the 6-digit code from your authenticator app, or the one Amazon just sent you.",
+        "data": {
+          "code": "One-time code"
+        },
+        "data_description": {
+          "code": "If the code is rejected, wait for the next one and enter that."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Amazon rejected the email or password.",
+      "invalid_otp": "Amazon rejected that code. Enter the next code from your authenticator app.",
+      "captcha_required": "Amazon asked for a captcha, which Home Assistant cannot show. Sign in once at amazon.com in a browser on the same network, wait a few minutes, then try again.",
+      "otp_page_missing": "Amazon accepted the password but did not ask for a one-time code. Turn on 2-Step Verification (Amazon account, Login & security) and try again. Approve-on-phone prompts are not supported.",
+      "cannot_retrieve_data": "Signed in, but Amazon did not return device data. Try again in a minute.",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Account is already configured",
+      "reauth_successful": "Re-authentication was successful",
+      "wrong_account": "You signed in with a different Amazon account than the one this entry was set up with.",
+      "no_supported_devices": "Signed in, but this Alexa account has no supported device (Amazon Smart Thermostat or Amazon Smart Plug). Devices found, by category: {summary}. Make sure the device is set up in the Alexa app, then run scripts/discover.py and open an issue with its output."
+    }
+  },
+  "exceptions": {
+    "invalid_auth": {
+      "message": "Amazon rejected the stored login; re-authentication is required."
+    },
+    "cannot_connect": {
+      "message": "Cannot reach Amazon: {error}"
+    },
+    "cannot_retrieve_data": {
+      "message": "Amazon did not return device data: {error}"
+    },
+    "action_failed": {
+      "message": "Amazon did not accept the command: {error}"
+    }
+  },
+  "entity": {
+    "climate": {
+      "thermostat": {
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "circulate": "Circulate"
+            }
+          }
+        },
+        "state": {
+          "heat_cool": "Auto"
+        }
+      }
+    }
+  }
+}

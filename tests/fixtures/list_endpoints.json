@@ -1,0 +1,247 @@
+{
+  "_note": "SYNTHETIC fixture shaped after ha-alexa-smarthome field names. Replace with a real capture from scripts/discover.py before Milestone 3.",
+  "data": {
+    "listEndpoints": {
+      "endpoints": [
+        {
+          "endpointId": "amzn1.alexa.endpoint.11111111-2222-3333-4444-555555555555",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Hallway Thermostat"
+            }
+          },
+          "manufacturer": {
+            "value": {
+              "text": "Amazon"
+            }
+          },
+          "model": {
+            "value": {
+              "text": "Amazon Smart Thermostat"
+            }
+          },
+          "serialNumber": {
+            "value": {
+              "text": "G0000000000000AB"
+            }
+          },
+          "softwareVersion": {
+            "value": {
+              "text": "1.0.0"
+            }
+          },
+          "enablement": "ENABLED",
+          "displayCategories": {
+            "all": [
+              {
+                "value": "THERMOSTAT"
+              },
+              {
+                "value": "TEMPERATURE_SENSOR"
+              }
+            ],
+            "primary": {
+              "value": "THERMOSTAT"
+            }
+          },
+          "alexaEnabledMetadata": {
+            "category": "DEVICE",
+            "capabilities": []
+          },
+          "legacyIdentifiers": {
+            "dmsIdentifier": {
+              "deviceType": {
+                "value": {
+                  "text": "AXXXXXXXXXXXX"
+                }
+              }
+            },
+            "chrsIdentifier": {
+              "entityId": "e-1"
+            }
+          },
+          "legacyAppliance": {
+            "applianceId": "AAA_SonarCloudService_x"
+          },
+          "features": [
+            {
+              "name": "thermostat",
+              "instance": null,
+              "operations": [
+                {
+                  "name": "setThermostatMode"
+                },
+                {
+                  "name": "setTargetSetpoint"
+                }
+              ],
+              "properties": [
+                {
+                  "name": "thermostatMode",
+                  "type": "RETRIEVABLE",
+                  "__typename": "ThermostatMode"
+                },
+                {
+                  "name": "targetSetpoint",
+                  "type": "RETRIEVABLE",
+                  "__typename": "Setpoint"
+                }
+              ]
+            },
+            {
+              "name": "temperatureSensor",
+              "instance": null,
+              "operations": [],
+              "properties": [
+                {
+                  "name": "temperature",
+                  "type": "RETRIEVABLE",
+                  "__typename": "TemperatureSensor"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "endpointId": "amzn1.alexa.endpoint.light-1",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Kitchen"
+            }
+          },
+          "displayCategories": {
+            "all": [
+              {
+                "value": "LIGHT"
+              }
+            ],
+            "primary": {
+              "value": "LIGHT"
+            }
+          },
+          "features": [
+            {
+              "name": "power",
+              "properties": [
+                {
+                  "name": "powerState",
+                  "__typename": "Power"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "endpointId": "amzn1.alexa.endpoint.plug-1",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Kasa Plug"
+            }
+          },
+          "displayCategories": {
+            "all": [
+              {
+                "value": "SMARTPLUG"
+              }
+            ],
+            "primary": {
+              "value": "SMARTPLUG"
+            }
+          },
+          "features": [
+            {
+              "name": "power",
+              "properties": [
+                {
+                  "name": "powerState",
+                  "__typename": "Power"
+                }
+              ]
+            }
+          ],
+          "manufacturer": {
+            "value": {
+              "text": "TP-Link"
+            }
+          }
+        },
+        {
+          "endpointId": "amzn1.alexa.endpoint.aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "friendlyNameObject": {
+            "value": {
+              "text": "Coffee Maker"
+            }
+          },
+          "manufacturer": {
+            "value": {
+              "text": "Amazon"
+            }
+          },
+          "model": {
+            "value": {
+              "text": "Amazon Smart Plug"
+            }
+          },
+          "serialNumber": {
+            "value": {
+              "text": "G0000000000000CD"
+            }
+          },
+          "softwareVersion": {
+            "value": {
+              "text": "2.0"
+            }
+          },
+          "enablement": "ENABLED",
+          "displayCategories": {
+            "all": [
+              {
+                "value": "SMARTPLUG"
+              }
+            ],
+            "primary": {
+              "value": "SMARTPLUG"
+            }
+          },
+          "alexaEnabledMetadata": {
+            "category": "DEVICE",
+            "capabilities": []
+          },
+          "features": [
+            {
+              "name": "power",
+              "instance": null,
+              "operations": [
+                {
+                  "name": "turnOn"
+                },
+                {
+                  "name": "turnOff"
+                }
+              ],
+              "properties": [
+                {
+                  "name": "powerState",
+                  "type": "RETRIEVABLE",
+                  "__typename": "Power"
+                }
+              ]
+            },
+            {
+              "name": "connectivity",
+              "instance": null,
+              "operations": [],
+              "properties": [
+                {
+                  "name": "connectivity",
+                  "type": "RETRIEVABLE",
+                  "__typename": "Reachability"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
